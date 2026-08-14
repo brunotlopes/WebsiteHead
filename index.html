@@ -86,7 +86,7 @@
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(27, 1, 0.01, 100);
-    camera.up.set(0, 1, 0);
+    camera.up.set(0, 0, 1);
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -154,6 +154,10 @@
         modelRoot.add(model);
 
         starRoot = model.getObjectByName('Star_Root');
+
+        // Correct the Blender export orientation so the eyes sit horizontally.
+        starRoot.rotation.x += THREE.MathUtils.degToRad(90);
+
         eyeL = model.getObjectByName('Eye_L');
         eyeR = model.getObjectByName('Eye_R');
         pupilL = model.getObjectByName('Pupil_L');
