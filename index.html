@@ -78,20 +78,20 @@
       modelFile: './head.glb?v=4',
 
       // Head movement
-      cursorYaw: THREE.MathUtils.degToRad(9),
-      cursorPitch: THREE.MathUtils.degToRad(5),
+      cursorYaw: THREE.MathUtils.degToRad(10),
+      cursorPitch: THREE.MathUtils.degToRad(6),
       cursorRoll: THREE.MathUtils.degToRad(2),
-      sectionYaw: THREE.MathUtils.degToRad(11),
+      sectionYaw: THREE.MathUtils.degToRad(6),
 
       // Confirmed Blender pupil axes:
       // X = depth, Y = left/right, Z = up/down
       pupilTravelY: 0.055,
       pupilTravelZ: 0.040,
-      pupilSectionBias: 0.025,
+      pupilSectionBias: 0.015,
 
       // Smoothing
-      dogSmooth: 4.0,
-      pupilSmooth: 11.0,
+      dogSmooth: 2.8,
+      pupilSmooth: 12.5,
 
       // Framing
       modelScale: 1.0,
@@ -306,9 +306,9 @@
       if (dogRoot && pupilL && pupilR) {
         const sectionBias =
           section === 'motion'
-            ? -CONFIG.sectionYaw
+            ? CONFIG.sectionYaw
             : section === 'vfx'
-              ? CONFIG.sectionYaw
+              ? -CONFIG.sectionYaw
               : 0;
 
         const targetYaw =
@@ -318,7 +318,8 @@
           pointer.y * CONFIG.cursorPitch;
 
         const targetRoll =
-          -pointer.x * CONFIG.cursorRoll;
+          -pointer.x * CONFIG.cursorRoll
+          + Math.sin(now * 0.45) * THREE.MathUtils.degToRad(0.35);
 
         currentDog.x = damp(
           currentDog.x,
@@ -373,9 +374,9 @@
 
         const sectionPupilBias =
           section === 'motion'
-            ? -CONFIG.pupilSectionBias
+            ? CONFIG.pupilSectionBias
             : section === 'vfx'
-              ? CONFIG.pupilSectionBias
+              ? -CONFIG.pupilSectionBias
               : 0;
 
         /*
@@ -438,7 +439,13 @@
         modelRoot.position.y =
           Math.sin(now * CONFIG.idleSpeed * 0.73 + 0.9) *
           CONFIG.idleFloat *
-          0.25;
+          0.35;
+
+        // Tiny forward/back "breathing" motion.
+        modelRoot.position.x =
+          Math.sin(now * CONFIG.idleSpeed * 0.52 + 0.4) *
+          CONFIG.idleFloat *
+          0.18;
       }
 
       renderer.render(scene, camera);
