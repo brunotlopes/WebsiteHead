@@ -75,7 +75,7 @@
     import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js/+esm';
 
     const CONFIG = {
-      modelFile: './head.glb',
+      modelFile: './head.glb?v=4',
 
       // Head movement
       cursorYaw: THREE.MathUtils.degToRad(9),
@@ -129,7 +129,8 @@
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     // Preserve the graphic Blender colors as closely as possible.
-    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.toneMapping = THREE.AgXToneMapping;
+    renderer.toneMappingExposure = 1.0;
 
     document.body.prepend(renderer.domElement);
 
